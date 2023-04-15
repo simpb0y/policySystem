@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.es.dao.PolicyMapper">
+  <resultMap id="BaseResultMap" type="com.example.es.entity.Policy">
+    <constructor>
+      <idArg column="policy_index" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="policy_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="view_num" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List">
+    policy_index, policy_id, view_num
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from policy
+    where policy_index = #{policyIndex,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from policy
+    where policy_index = #{policyIndex,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.es.entity.Policy">
+    insert into policy (policy_index, policy_id, view_num
+      )
+    values (#{policyIndex,jdbcType=VARCHAR}, #{policyId,jdbcType=VARCHAR}, #{viewNum,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.es.entity.Policy">
+    insert into policy
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="policyIndex != null">
+        policy_index,
+      </if>
+      <if test="policyId != null">
+        policy_id,
+      </if>
+      <if test="viewNum != null">
+        view_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="policyIndex != null">
+        #{policyIndex,jdbcType=VARCHAR},
+      </if>
+      <if test="policyId != null">
+        #{policyId,jdbcType=VARCHAR},
+      </if>
+      <if test="viewNum != null">
+        #{viewNum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.es.entity.Policy">
+    update policy
+    <set>
+      <if test="policyId != null">
+        policy_id = #{policyId,jdbcType=VARCHAR},
+      </if>
+      <if test="viewNum != null">
+        view_num = #{viewNum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where policy_index = #{policyIndex,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.es.entity.Policy">
+    update policy
+    set policy_id = #{policyId,jdbcType=VARCHAR},
+      view_num = #{viewNum,jdbcType=INTEGER}
+    where policy_index = #{policyIndex,jdbcType=VARCHAR}
+  </update>
+</mapper>

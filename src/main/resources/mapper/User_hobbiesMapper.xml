@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.es.dao.User_hobbiesMapper">
+  <resultMap id="BaseResultMap" type="com.example.es.entity.User_hobbies">
+    <constructor>
+      <arg column="user_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="hobbies_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <insert id="insert" parameterType="com.example.es.entity.User_hobbies">
+    insert into user_hobbies (user_id, hobbies_id)
+    values (#{userId,jdbcType=VARCHAR}, #{hobbiesId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.es.entity.User_hobbies">
+    insert into user_hobbies
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="hobbiesId != null">
+        hobbies_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="hobbiesId != null">
+        #{hobbiesId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

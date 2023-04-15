@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.es.dao.HistoryMapper">
+  <resultMap id="BaseResultMap" type="com.example.es.entity.History">
+    <constructor>
+      <arg column="user_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="policy_id" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="timestamp" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="policy_index" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <insert id="insert" parameterType="com.example.es.entity.History">
+    insert into history (user_id, policy_id, timestamp, 
+      policy_index)
+    values (#{userId,jdbcType=VARCHAR}, #{policyId,jdbcType=VARCHAR}, #{timestamp,jdbcType=TIMESTAMP}, 
+      #{policyIndex,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.es.entity.History">
+    insert into history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="policyId != null">
+        policy_id,
+      </if>
+      <if test="timestamp != null">
+        timestamp,
+      </if>
+      <if test="policyIndex != null">
+        policy_index,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="policyId != null">
+        #{policyId,jdbcType=VARCHAR},
+      </if>
+      <if test="timestamp != null">
+        #{timestamp,jdbcType=TIMESTAMP},
+      </if>
+      <if test="policyIndex != null">
+        #{policyIndex,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>
