@@ -118,23 +118,24 @@ public class ElasticsearchService {
                                      Integer userid
                                 )throws IOException{
 
-
+        String user_province = null;
         if(StpUtil.isLogin()){
+
             if(userid==0){
                 QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
 
                 String user_id = StpUtil.getLoginIdAsString();
                 queryWrapper.eq("id",user_id);
 
-                String user_province = userMapper.selectOne(queryWrapper).getProvince();
-                content = content + user_province;
+                user_province = userMapper.selectOne(queryWrapper).getProvince();
+
             }
             else {
                 QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
                 queryWrapper.eq("id",userid);
 
-                String user_province = userMapper.selectOne(queryWrapper).getProvince();
-                content = content + user_province;
+                user_province = userMapper.selectOne(queryWrapper).getProvince();
+
 
             }
 
@@ -143,7 +144,9 @@ public class ElasticsearchService {
 
 
         QueryBuilder query = QueryBuilders.boolQuery()
-                .must(QueryBuilders.multiMatchQuery(content, "POLICY_TITLE", "POLICY_BODY"));
+                .should(QueryBuilders.multiMatchQuery(content, "POLICY_TITLE", "POLICY_BODY")).boost(10.0f)
+                .should(QueryBuilders.multiMatchQuery(content+user_province, "POLICY_TITLE", "POLICY_BODY")).boost(1.0f)
+                .minimumShouldMatch(1);
 
         QueryBuilder fororquery = QueryBuilders.boolQuery()
                 .must(QueryBuilders.multiMatchQuery(content, "POLICY_TITLE", "POLICY_BODY"));
@@ -193,6 +196,7 @@ public class ElasticsearchService {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         searchSourceBuilder.fetchSource(null,"POLICY_BODY");
+
         searchSourceBuilder.query(query);
         searchSourceBuilder.from(page*size-size);
         searchSourceBuilder.size(size);
